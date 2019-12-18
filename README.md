@@ -11,5 +11,5 @@ sudo apt-get install libglfw3 libglfw3-dev g++
 ```
 And to compile and run the program
 ```bash
-g++ main.cpp -std=c++17 -lstdc++fs -lGL -lglfw
+g++ main.cpp -std=c++17 -lstdc++fs -lGL -lglfw && ./a.out
 ```
