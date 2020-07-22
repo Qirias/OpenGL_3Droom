@@ -24,6 +24,7 @@ float lastY = screenHeight / 2.0f;
 bool disco = false;
 float lightHeight = 3.0f;
 bool showFPS = false;
+bool showQuad = true;
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -63,20 +64,27 @@ void processInput(GLFWwindow *window)
     /*=================================*/
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) //Window close
         glfwSetWindowShouldClose(window, true);
-    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) //Lines of Triangles
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) //Fill the Triangles
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     if (glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS)
         showFPS = !showFPS;
     if (glfwGetKey(window, GLFW_KEY_PAGE_UP) == GLFW_PRESS)
         lightHeight += .03f;
     if (glfwGetKey(window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
         lightHeight -= .03f;
-    if (glfwGetKey(window, GLFW_KEY_HOME) == GLFW_PRESS)
-        disco = true;
-    if (glfwGetKey(window, GLFW_KEY_END) == GLFW_PRESS)
-        disco = false;
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_L && action == GLFW_PRESS)
+    {
+        if (showQuad)
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        else
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        showQuad = !showQuad;
+    }
+
+    if (key == GLFW_KEY_HOME && action == GLFW_PRESS)
+        disco = !disco;
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
@@ -114,6 +122,7 @@ int main()
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetKeyCallback(window, key_callback);
 
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
